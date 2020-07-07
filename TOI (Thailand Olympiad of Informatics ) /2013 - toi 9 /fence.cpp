@@ -2,101 +2,94 @@
 
 using namespace std ;
 
-int m ,n ;
+int n , m , t , a , b  ; 
 
-int t ;
-const int MAXN = 501 ;
-int a[MAXN][MAXN];
+const int MAXN = 505 ; 
+int horiz[MAXN][MAXN] , verti[MAXN][MAXN] ;
+int arr[MAXN][MAXN]  ;  
 
-int co(){
+int  co(){
 
-// HORIZONTAL ARR ;
-int horiz[MAXN][MAXN],vert[MAXN][MAXN] ;
+  int ma = 0 ; 
+  for(int i = 1 ; i<=n ; i ++){
+    for(int j = 1 ; j<=m ; j ++){
 
-    for (int i=0;i<m;i++){
-        horiz[i][0] = a[i][0] ;
-    }
-
-    for (int i=0;i<m;i++){
-        for (int j=1;j<n;j++){
-            if(a[i][j] == 1)
-            {
-                horiz[i][j] = horiz[i][j-1] + 1;
-
-            }
-            else
-                horiz[i][j] = horiz[i][j-1]  ;
-        }
-    }
-//    vertical arr ;
-
-    for (int j=0;j<n;j++){
-        vert[0][j] = a[0][j] ;
-    }
-    for(int j=0;j<n;j++){
-        for(int i=1;i<m;i++){
-            if(a[i][j] == 1){
-                vert[i][j] = vert[i-1][j] + 1;
-            }
-            else
-                vert[i][j] = vert[i-1][j];
-        }
-    }
-    int ma = 0 ;
-    for (int k=1;k<=min(m,n);k++){
-        bool track = false;
-        for (int i=k-1;i<m && !track;i++){
-            for (int j=k-1;j<n && !track;j++){
-                if(!a[i][j] && !a[i][j-k+1] && !a[i-k+1][j] && !a[i-k+1][j-k+1]){
-                //  horiz
-                    if(horiz[i][j]-horiz[i][j-k+1] == 0  && horiz[i-k+1][j] - horiz[i-k+1][j-k+1] == 0 ){
-                        if(vert[i][j]-vert[i-k+1][j] == 0  && vert[i][j-k+1] - vert[i-k+1][j-k+1] == 0 ){
-                            track = true ;
-                            break ;
-                        }
-                    }
-
-                    else
-                       continue;
-                }
-            }
-        }
-        if(track)
-            ma = k ;
+      horiz[i][j] = horiz[i][j-1] + arr[i][j] ; 
+      verti[i][j] = verti[i-1][j] + arr[i][j] ; 
 
     }
-    return ma;
+  }
 
+  for(int k =1 ; k<= min(n , m ) ;  k++){
+
+    bool track = false ; 
+
+    for(int i = k ; i <=n  ; i ++){
+      for(int j = k ; j <= m ; j++){
+
+      //  horizontal check
+
+      int h1 = horiz[i - k + 1][j] - horiz[i-k+1][j-k] ;  
+      int h2 = horiz[i][j] - horiz[i][j-k] ;
+
+      //  vertical check 
+
+      int v1 = verti[i][j-k+1] - verti[i-k][j-k+1] ; 
+
+      int v2 = verti[i][j] - verti[i-k][j] ; 
+
+
+      if( (h1 == k && h2 == k ) && (v1 == k && v2 == k ))
+        track = true ; 
+      }
+    }
+
+    if( track )
+      ma = k ; 
+  }
+
+  return ma ; 
 }
 
-int main()
-{
+int main(){
 
-    scanf("%d%d",&m,&n) ;
-    scanf("%d",&t) ;
-
-    for (int i=0;i<t;i++)
-    {
-        int x, y ;
-        scanf("%d%d",&x,&y);
-        a[x][y] = 1;
+  cin >> n >> m >> t ; 
+  
+  for(int i =1 ; i<=n ; i++){
+    for(int j = 1 ; j<=m ; j ++){
+      arr[i][j] = 1 ; 
     }
-    int a1 = co();
+  }
 
-    for (int i=0;i<m;i++){
-        for (int j=0;j<n;j++){
-            a[i][j] = 0 ;
-        }
+
+  for(int i = 0 ; i < t ; i++ ){
+
+    cin >> a >> b ; 
+    arr[a+1][b+1] = 0 ; 
+
+  }
+
+  
+
+  int ans1 = co() ; 
+
+  cin >> n >> m >> t ; 
+  for(int i =1 ; i<=n ; i++){
+    for(int j = 1 ; j<=m ; j ++){
+      arr[i][j] = 1 ; 
+
+      horiz[i][j] = 0 ; 
+      verti[i][j] = 0 ; 
     }
-    scanf("%d%d",&m,&n) ;
-    scanf("%d",&t) ;
+  }
 
-    for (int i=0;i<t;i++)
-    {
-        int x, y ;
-        scanf("%d%d",&x,&y);
-        a[x][y] = 1;
-    }
-    printf("%d\n%d",a1,co());
+   for(int i = 0 ; i < t ; i++ ){
 
+    cin >> a >> b ; 
+    arr[a+1][b+1] = 0 ; 
+
+  }
+
+  cout<< ans1 << endl << co() <<endl ; 
 }
+
