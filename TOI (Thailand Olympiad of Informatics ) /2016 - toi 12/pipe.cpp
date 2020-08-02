@@ -41,6 +41,7 @@ int main(){
 
       int dis = abs(v[i].first - v[u].first) + abs(v[i].second - v[u].second) ;
       
+//       ****
       vis[i] = min( dis , vis[i]) ; 
       if( vis[i] == 0)
         continue ; 
